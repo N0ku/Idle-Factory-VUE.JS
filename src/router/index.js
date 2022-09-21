@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from '../pages/Home.vue';
+import Factory from '../pages/Factory.vue';
+import Form from '../pages/Form.vue';
 
 const routes = [
     {
-        name: 'home',
+        name: 'Factory',
         path: '/',
-        component: Home
+        component: Factory
+    },
+    {
+        name: 'Form',
+        path: '/form',
+        component: Form
     }
 ]
 

@@ -3,17 +3,34 @@
     <nav>
       <ul>
         <li>
-          <router-link to="/">Home</router-link>
+          <router-link to="/">Factory</router-link>
+          <router-link to="/form">Form</router-link>
         </li>
       </ul>
     </nav>
   </header>
   <router-view></router-view>
+  <p>{{ apiData }}</p>
 </template>
 
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      apiData: {},
+    };
+  },
+  methods: {
+    requete() {
+      fetch("http://localhost:3000/factories")
+        .then((result) => result.json())
+        .then((json) => (this.apiData = json));
+    },
+  },
+  mounted() {
+    this.requete();
+  },
 };
 </script>
 
