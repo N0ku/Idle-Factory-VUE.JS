@@ -41,6 +41,9 @@
 </template>
 
 <script>
+    import { useMyStore } from '../store/store.js'
+    import { mapStores, mapState } from 'pinia'
+
     export default {
         name:"DisplayUser",
         data() {
@@ -110,6 +113,10 @@
               })
               .then((json) => (this.ressources = json));
           }
+        },
+        computed: {
+          ...mapStores(useMyStore),
+          ...mapState(useMyStore, ['products']),
         },
         mounted() {
           this.getRessource();
