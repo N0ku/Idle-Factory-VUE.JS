@@ -10,7 +10,6 @@
     </nav>
   </header>
   <router-view></router-view>
-  <!-- <p>{{ apiData }}</p> -->
 </template>
 
 <script>
