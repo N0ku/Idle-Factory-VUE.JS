@@ -9,8 +9,8 @@
       placeholder="Enter your username.."
     />
     <button type="submit" id="play-button" v-on:click="start()">Start !</button>
-    <p>{{ users }}</p>
   </div>
+  <p>{{ users }}</p>
 </template>
 
 <script>
@@ -33,11 +33,14 @@ export default {
           .then((result) => result.json())
           .then((response) => (this.users = response));
 
+        console.log(this.users);
         for (let i = 0; i < this.users.length; i++) {
           if (this.users[i].username == this.username) {
             exist = true;
+            console.log("EXIST = TRUE");
           } else {
             exist = false;
+            console.log("EXIST = FALSE");
           }
         }
         this.connect(exist);
@@ -47,15 +50,16 @@ export default {
     },
     createAccount() {
       axios
-        .put("http://localhost:3000/users", {
-          id: "2",
+        .post("http://localhost:3000/users", {
+          id: this.users.length + 1,
           name: this.username,
           money: 1000,
           factories: [],
         })
-          .then((res) => console.log(res));
-/*         this.connect(true)
- */    },
+        .then((res) => res);
+      /*         this.connect(true)
+       */
+    },
     connect(exist) {
       if (exist) {
         console.log("The user exist");
