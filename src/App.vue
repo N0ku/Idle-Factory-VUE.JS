@@ -10,7 +10,7 @@
     </nav>
   </header>
   <router-view></router-view>
-  <p>{{ apiData }}</p>
+  <!-- <p>{{ apiData }}</p> -->
 </template>
 
 <script>
@@ -21,16 +21,16 @@ export default {
       apiData: {},
     };
   },
-  methods: {
-    requete() {
-      fetch("http://localhost:3000/factories")
-        .then((result) => result.json())
-        .then((json) => (this.apiData = json));
-    },
-  },
-  mounted() {
-    this.requete();
-  },
+  // methods: {
+  //   requete() {
+  //     fetch("http://localhost:3000/factories")
+  //       .then((result) => result.json())
+  //       .then((json) => (this.apiData = json));
+  //   },
+  // },
+  // mounted() {
+  //   this.requete();
+  // },
 };
 </script>
 

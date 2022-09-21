@@ -57,6 +57,7 @@
           addRessource(){
             var ressource = document.getElementById('add').getAttribute("value");
             this.ressources.push({id: this.ressources.length+1, name: ressource, production_level: 1});
+
             async function postData(url = '', data = {}) {
               const response = await fetch(url, {
                 method: 'POST',
@@ -98,14 +99,13 @@
             this.ressources.splice(id, 1);
           },
           // Update a ressource (rename the ressource)
-          // updateRessource(id){
-          //   this.ressources[id].name = document.getElementById('updateValue').setAttribute("value");
-          // },
+          updateRessource(id){
+            this.ressources[id].name = document.getElementById('updateValue').setAttribute("value");
+          },
           // get the ressource from API
           getRessource(){
             fetch("http://localhost:3000/ressources")
               .then((result) => {
-                console.log(result);
                 return result.json()
               })
               .then((json) => (this.ressources = json));
