@@ -41,8 +41,8 @@
 </template>
 
 <script>
-    import { useMyStore } from '../store/store.js'
-    import { mapStores, mapState } from 'pinia'
+    import { useMyStore } from '../store/store'
+    import { mapState } from 'pinia'
 
     export default {
         name:"DisplayUser",
@@ -115,8 +115,7 @@
           }
         },
         computed: {
-          ...mapStores(useMyStore),
-          ...mapState(useMyStore, ['products']),
+          ...mapState(useMyStore, ['ressources']),
         },
         mounted() {
           this.getRessource();

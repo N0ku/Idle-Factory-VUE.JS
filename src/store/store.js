@@ -1,10 +1,5 @@
 import { defineStore } from 'pinia'
-
-fetch("http://localhost:3000/ressources")
-  .then((result) => {
-  return result.json()
-  })
-  .then((json) => (this.ressources = json));
+import axios from "axios";
 
 export const useMyStore = defineStore('my', {
   state: () => ({
@@ -15,8 +10,12 @@ export const useMyStore = defineStore('my', {
   }),
   actions: {
     async getUsers() {
-      const { data } = this.json;
-      this.users = data
+      axios.get("http://localhost:3000/users")
+        .then((result) => this.users = result.data)
+    },
+    async getRessources() {
+      axios.get("http://localhost:3000/ressources")
+        .then((result) => this.ressources = result.data)
     }
   }
 });
