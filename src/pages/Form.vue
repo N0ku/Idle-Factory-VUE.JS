@@ -53,8 +53,9 @@ export default {
           money: 1000,
           factories: [],
         })
-        .then((res) => console.log(res));
-    },
+          .then((res) => console.log(res));
+/*         this.connect(true)
+ */    },
     connect(exist) {
       if (exist) {
         console.log("The user exist");
