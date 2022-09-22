@@ -42,7 +42,7 @@
 
 <script>
     import { useMyStore } from '../store/store'
-    import { mapState } from 'pinia'
+    import { mapStores } from 'pinia'
 
     export default {
         name:"DisplayUser",
@@ -52,7 +52,8 @@
             update : false,
             del : false,
             list : false,
-            ressources: {}
+            ressources: {},
+            users: {}
           }
         },
         methods: {
@@ -104,21 +105,15 @@
           // Update a ressource (rename the ressource)
           updateRessource(id){
             this.ressources[id].name = document.getElementById('updateValue').setAttribute("value");
-          },
-          // get the ressource from API
-          getRessource(){
-            fetch("http://localhost:3000/ressources")
-              .then((result) => {
-                return result.json()
-              })
-              .then((json) => (this.ressources = json));
           }
         },
         computed: {
-          ...mapState(useMyStore, ['ressources']),
+          ...mapStores(useMyStore)
         },
         mounted() {
-          this.getRessource();
+          this.myStore.getRessources();
+          this.ressources = this.myStore.ressources;
+          
         }
     }
 
