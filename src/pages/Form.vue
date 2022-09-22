@@ -78,7 +78,6 @@ export default {
       }
     },
     connect() {
-        window.location("/");
     },
   },
   created() {
