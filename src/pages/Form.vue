@@ -65,7 +65,13 @@ export default {
           id: this.users.length + 1,
           name: this.name,
           money: 1000,
-          factories: [this.select,100,10],
+          factories: [
+            {
+              resources: this.select,
+              quantity: 10,
+              production: 100,
+            },
+          ],
         })
         .then((res) => res);
       this.connect();
