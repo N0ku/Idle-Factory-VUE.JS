@@ -1,6 +1,25 @@
 <template>
-  <h1>DisplayRes</h1>
-  <p>{{ user }}</p>
+  <div class="factory">
+    <div class="box-resources">
+      <h1>{{ factory.resources }}</h1>
+      <div class="box-resources-infos">
+        <p>{{ factory.quantity }}</p>
+        <p>{{ factory.production }}</p>
+      </div>
+    </div>
+    <div class="canva">
+      <p>Factory design</p>
+    </div>
+    <div class="pagination">
+      <button
+        v-for="(factory, index) in factories"
+        :key="factory"
+        v-on:click="updatePage(index)"
+      >
+        {{ index }}
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -12,9 +31,11 @@ export default {
   data() {
     return {
       factories: [],
+      factory: [],
       users: {},
       username: "",
       user: {},
+      page: 0,
     };
   },
   methods: {
@@ -24,9 +45,16 @@ export default {
           this.user = this.users[i];
         }
       }
-      for (let index = 0; index < this.user.factories.length; index++) {
-        this.factories.push(this.user.factories[index]);
-      }
+      this.factory = this.user.factories[this.page];
+      this.factories = this.user.factories;
+      console.log(this.factories);
+      console.log(this.factory);
+    },
+    updatePage(page) {
+      console.log("update page");
+      this.page = page;
+      console.log(this.page);
+      this.factory = this.user.factories[this.page];
     },
   },
   computed: {

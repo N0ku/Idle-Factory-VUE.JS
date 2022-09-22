@@ -1,14 +1,4 @@
 <template>
-  <header>
-    <nav>
-      <ul>
-        <li>
-          <router-link to="/">Form</router-link>
-          <router-link to="/factory">Factory</router-link>
-        </li>
-      </ul>
-    </nav>
-  </header>
   <router-view></router-view>
 </template>
 
