@@ -5,7 +5,7 @@
 
         </ul>
         <form submit.prevent="start">
-          <input type="text" v-model="add" id="add"> 
+          <input type="text" v-model="add" name="add"> 
           <button type="submit" v-on:click="addRessource()">Add ressource</button>
         </form>
         <button v-on:click="openDelete()">Delete ressource</button>
@@ -27,7 +27,7 @@
             <li v-for="ressource in ressources" :key="ressource.id">
               {{ ressource.name }} 
               <form submit.prevent="start">
-                <input type="text" name="updateValue">
+                <input type="text" v-model="updateValue" name="updateValue">
                 <button type="submit" v-on:click="updateRessource(ressource.id)">Update</button>
               </form>
             </li>
