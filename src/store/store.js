@@ -3,10 +3,10 @@ import axios from "axios";
 
 export const useMyStore = defineStore('my', {
   state: () => ({
-    users : [],
-    resources : [],
-    factories : [],
-    offers : []
+    users: [],
+    resources: [],
+    factories: [],
+    offers: []
   }),
   actions: {
     async getUsers() {
@@ -15,7 +15,7 @@ export const useMyStore = defineStore('my', {
     },
     async getResources() {
       axios.get("http://localhost:3000/ressources")
-        .then((result) => this.res$sources = result.data)
+        .then((result) => this.resources = result.data)
     }
   }
 });

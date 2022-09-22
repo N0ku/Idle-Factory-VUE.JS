@@ -13,23 +13,9 @@
 </template>
 
 <script>
-import { useMyStore } from './store/store';
-import { mapStores } from 'pinia'
 
 export default {
-  name: "App",
-  data() {
-    return {
-      apiData: {},
-    };
-  },
-  computed: {
-    ...mapStores(useMyStore)
-  },
-  mounted() {
-    this.myStore.getResources();
-    console.log(this.myStore.resources);
-  }
+  name: "App"
 };
 </script>
 

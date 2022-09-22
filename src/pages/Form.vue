@@ -41,12 +41,11 @@ export default {
           .then((result) => result.json())
           .then((users) => this.verifyUsers(users));
       } else {
-        console.log("Pseudo invalids");
+        console.log("Username invalid");
       }
     },
     verifyUsers(users) {
       let exist;
-      console.log(users);
       this.users = users;
       for (let i = 0; i < users.length; i++) {
         if (users[i].name == this.name) {
@@ -77,8 +76,7 @@ export default {
         this.sendNewAccount();
       }
     },
-    connect() {
-    },
+    connect() {},
   },
   created() {
     fetch("http://localhost:3000/ressources")
