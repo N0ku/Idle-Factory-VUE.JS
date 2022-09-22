@@ -1,16 +1,24 @@
 <template>
   <div>
     <h1>Welcome Idle Factory:The Game 🤯</h1>
-    <label for="username">Username</label>
-    <input
-      type="text"
-      name="username"
-      id="username"
-      placeholder="Enter your username.."
-    />
-    <button type="submit" id="play-button" v-on:click="start()">Start !</button>
+    <label for="name">Username</label>
+    <form @submit.prevent="start">
+      <input
+        type="text"
+        v-model="name"
+        id="name"
+        placeholder="Enter your name.."
+      />
+      <label for="resources">Choose your first factory: </label>
+      <select name="resources" id="resources" v-model="select">
+        <option value="">--Choose a resources--</option>
+        <option v-for="resource in ressources" :key="resource">
+          {{ resource.name }}
+        </option>
+      </select>
+      <input type="submit" id="play-button" value="Start !" />
+    </form>
   </div>
-  <p>{{ users }}</p>
 </template>
 
 <script>
@@ -21,52 +29,62 @@ export default {
   data() {
     return {
       users: {},
-      username: "",
+      name: "",
+      ressources: {},
+      select: "",
     };
   },
   methods: {
     start() {
-      this.username = document.getElementById("username").value;
-      let exist;
-      if (this.username.length > 3) {
+      if (this.name.length > 3) {
         fetch("http://localhost:3000/users")
           .then((result) => result.json())
-          .then((response) => (this.users = response));
-
-        console.log(this.users);
-        for (let i = 0; i < this.users.length; i++) {
-          if (this.users[i].username == this.username) {
-            exist = true;
-            console.log("EXIST = TRUE");
-          } else {
-            exist = false;
-            console.log("EXIST = FALSE");
-          }
-        }
-        this.connect(exist);
+          .then((users) => this.verifyUsers(users));
       } else {
         console.log("Pseudo invalide");
       }
     },
-    createAccount() {
+    verifyUsers(users) {
+      let exist;
+      console.log(users);
+      this.users = users;
+      for (let i = 0; i < users.length; i++) {
+        if (users[i].name == this.name) {
+          exist = true;
+          break;
+        } else {
+          exist = false;
+        }
+      }
+      this.account(exist);
+    },
+    sendNewAccount() {
       axios
         .post("http://localhost:3000/users", {
           id: this.users.length + 1,
-          name: this.username,
+          name: this.name,
           money: 1000,
-          factories: [],
+          factories: [this.select],
         })
         .then((res) => res);
-      /*         this.connect(true)
-       */
+      this.connect();
     },
-    connect(exist) {
+    account(exist) {
       if (exist) {
         console.log("The user exist");
+        this.connect();
       } else {
-        this.createAccount();
+        this.sendNewAccount();
       }
     },
+    connect() {
+      console.log("On se connecte");
+    },
+  },
+  created() {
+    fetch("http://localhost:3000/ressources")
+      .then((result) => result.json())
+      .then((ressources) => (this.ressources = ressources));
   },
 };
 </script>
