@@ -27,8 +27,8 @@ export default {
     ...mapStores(useMyStore)
   },
   mounted() {
-    this.myStore.getRessources();
-    console.log(this.myStore.ressources);
+    this.myStore.getResources();
+    console.log(this.myStore.resources);
   }
 };
 </script>

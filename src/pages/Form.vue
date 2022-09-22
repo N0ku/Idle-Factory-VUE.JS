@@ -12,7 +12,7 @@
       <label for="resources">Choose your first factory: </label>
       <select name="resources" id="resources" v-model="select">
         <option value="">--Choose a resources--</option>
-        <option v-for="resource in ressources" :key="resource">
+        <option v-for="resource in resources" :key="resource">
           {{ resource.name }}
         </option>
       </select>
@@ -30,7 +30,7 @@ export default {
     return {
       users: {},
       name: "",
-      ressources: {},
+      resources: {},
       select: "",
     };
   },
@@ -41,7 +41,7 @@ export default {
           .then((result) => result.json())
           .then((users) => this.verifyUsers(users));
       } else {
-        console.log("Pseudo invalide");
+        console.log("Pseudo invalids");
       }
     },
     verifyUsers(users) {
@@ -83,7 +83,7 @@ export default {
   created() {
     fetch("http://localhost:3000/ressources")
       .then((result) => result.json())
-      .then((ressources) => (this.ressources = ressources));
+      .then((resources) => (this.resources = resources));
   },
 };
 </script>
