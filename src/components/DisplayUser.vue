@@ -1,16 +1,18 @@
 <template>
     <div>
-      <div v-if="this.ressources.id == 1">
+      <div v-if="this.users.id == 1">
         <ul>
 
         </ul>
-        <input type="text" name="add" id="add"> 
-        <button v-on:click="addRessource()">Add ressource</button>
+        <form submit.prevent="start">
+          <input type="text" v-model="add" id="add"> 
+          <button type="submit" v-on:click="addRessource()">Add ressource</button>
+        </form>
         <button v-on:click="openDelete()">Delete ressource</button>
         <button v-on:click="openUpdate()">Manage ressources</button>
         <button v-on:click="listRessource()">List ressources</button>
         <div v-show="listRessources == true">
-          <button v-on:click="closeList()"></button>
+          <button v-on:click="closeList()">x</button>
           <ul v-if="list == true">
             <li v-for="ressource in ressources" :key="ressource.id">
               {{ ressource.name }}
@@ -18,19 +20,19 @@
           </ul>
           <ul v-if="del == true">
             <li v-for="ressource in ressources" :key="ressource.id">
-              {{ ressource.name }} <button v-on:click="deleteRessource(ressource[id])"></button>
+              {{ ressource.name }} <button v-on:click="deleteRessource(ressource[id])">Delete</button>
             </li>
           </ul>
           <ul v-if="update == true">
             <li v-for="ressource in ressources" :key="ressource.id">
               {{ ressource.name }} 
               <input type="text" name="updateValue" id="updateValue">
-              <!--<button v-on:click="updateRessource(ressource[id])"></button>-->
+              <!--<button v-on:click="updateRessource(ressource[id])">Update</button>-->
             </li>
           </ul>
         </div>
       </div>
-      <div>
+      <div v-else>
         <ul>
           <li v-for="ressource in ressources" :key="ressource.id">
             {{ ressource.name }}
@@ -43,38 +45,39 @@
 <script>
     import { useMyStore } from '../store/store'
     import { mapStores } from 'pinia'
+import axios from 'axios';
 
     export default {
         name:"DisplayUser",
         data() {
           return {
+            add: "",
             listRessources : false,
             update : false,
             del : false,
             list : false,
             ressources: {},
-            users: {}
+            users: {
+              "id": 1,
+              "username": "Test",
+              "money": 1000,
+              "factories": []
+            }
           }
         },
         methods: {
           // Add a ressource to the list of ressources
           addRessource(){
-            var ressource = document.getElementById('add').getAttribute("value");
-            this.ressources.push({id: this.ressources.length+1, name: ressource, production_level: 1});
+            this.ressources.push({id: this.ressources.length+1, name: this.add, production_level: 1});
 
-            async function postData(url = '', data = {}) {
-              const response = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(data)
-            });
-            return response.json();
-          }
-
-          postData('http://localhost:3000/ressources', this.ressources)
-            .then((data) => {
-              console.log(data);
-            });
-
+            axios.post(
+              'http://localhost:3000/ressources',
+              {
+                id: this.ressources.length+1,
+                name: this.add,
+                production_level: 1
+              }
+            );
           },
           // Close the window with the list of ressources
           closeList(){
@@ -101,6 +104,11 @@
           // Delete a ressource
           deleteRessource(id){
             this.ressources.splice(id, 1);
+
+            async function deleted() {
+              await fetch('http://localhost:3000/ressources', { method: 'DELETE' });
+            }
+            deleted();
           },
           // Update a ressource (rename the ressource)
           updateRessource(id){
