@@ -20,16 +20,7 @@ export default {
       apiData: {},
     };
   },
-  methods: {
-    requete() {
-      fetch("http://localhost:3000/factories")
-        .then((result) => result.json())
-        .then((json) => (this.apiData = json));
-    },
-  },
-  mounted() {
-    this.requete();
-  },
+  methods: {},
 };
 </script>
 

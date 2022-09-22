@@ -78,7 +78,7 @@ export default {
       }
     },
     connect() {
-      console.log("On se connecte");
+        window.location("/");
     },
   },
   created() {
