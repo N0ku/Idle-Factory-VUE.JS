@@ -28,7 +28,6 @@
           </li>
         </ul>
       </div>
-      <DisplayOffer/>
     </div>
     <div>
       <ul>
