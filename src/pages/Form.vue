@@ -65,7 +65,7 @@ export default {
           id: this.users.length + 1,
           name: this.name,
           money: 1000,
-          factories: [this.select],
+          factories: [this.select,100,10],
         })
         .then((res) => res);
       this.connect();

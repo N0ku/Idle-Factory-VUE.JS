@@ -1,17 +1,14 @@
 <template>
-  <DisplayRes></DisplayRes>
-  <DisplayUser></DisplayUser>
+  <DisplayFactory></DisplayFactory>
 </template>
 
 <script>
-import DisplayRes from '../components/DisplayRes.vue'
-import DisplayUser from '../components/DisplayUser.vue'
+import DisplayFactory from '../components/DisplayFactory.vue'
 
 export default {
   name: "FactoryPage",
   components: {
-    DisplayRes,
-    DisplayUser
-}
+    DisplayFactory,
+  }
 };
 </script>

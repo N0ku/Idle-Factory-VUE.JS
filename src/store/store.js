@@ -7,17 +7,18 @@ export const useMyStore = defineStore('my', {
     resources: {},
     factories: {},
     offers: {},
-    username: ''
+    username: '',
+    user: {}
   }),
   actions: {
     async getUsers() {
-     await axios.get("http://localhost:3000/users")
-       .then((result) => { this.users = result.data })
+      await axios.get("http://localhost:3000/users")
+        .then((result) => { this.users = result.data })
       return this.users;
     },
     async getResources() {
-     await axios.get("http://localhost:3000/ressources")
-       .then((result) => this.resources = result.data)
+      await axios.get("http://localhost:3000/ressources")
+        .then((result) => this.resources = result.data)
       return this.resources;
     }
   }
