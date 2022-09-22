@@ -61,6 +61,7 @@ import axios from 'axios';
         return {
           dispOffer: false,
           offers: {},
+          users: {},
           buys: false,
           sell: false,
           re_source: "",
@@ -107,7 +108,7 @@ import axios from 'axios';
           this.sell = true;
         },
         buyOffer(){
-          
+
         },
         sellOffer(){
 
@@ -119,6 +120,8 @@ import axios from 'axios';
       mounted() {
         this.myStore.getOffers();
         this.offers = this.myStore.offers;
+        this.myStore.getUsers();
+        this.factories = this.myStore.users;
       }
   }
 

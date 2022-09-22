@@ -20,6 +20,10 @@ export const useMyStore = defineStore('my', {
     async getOffers() {
       axios.get("http://localhost:3000/offers")
         .then((result) => this.offers = result.data)
-    }
+    },
+    async getFactories() {
+      axios.get("http://localhost:3000/factories")
+        .then((result) => this.factories = result.data)
+    },
   }
 });
