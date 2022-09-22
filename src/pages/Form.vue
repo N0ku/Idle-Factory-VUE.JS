@@ -79,7 +79,8 @@ export default {
       }
     },
     connect() {
-      location.assign("/factory");
+      this.myStore.username = this.name;
+      this.$router.push("/factory");
     },
   },
   computed: {

@@ -6,7 +6,8 @@ export const useMyStore = defineStore('my', {
     users: {},
     resources: {},
     factories: {},
-    offers: {}
+    offers: {},
+    username: ''
   }),
   actions: {
     async getUsers() {
