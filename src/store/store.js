@@ -4,7 +4,7 @@ import axios from "axios";
 export const useMyStore = defineStore('my', {
   state: () => ({
     users : [],
-    ressources : [],
+    resources : [],
     factories : [],
     offers : []
   }),
@@ -13,9 +13,9 @@ export const useMyStore = defineStore('my', {
       axios.get("http://localhost:3000/users")
         .then((result) => this.users = result.data)
     },
-    async getRessources() {
-      axios.get("http://localhost:3000/ressources")
-        .then((result) => this.ressources = result.data)
+    async getResources() {
+      axios.get("http://localhost:3000/resources")
+        .then((result) => this.resources = result.data)
     }
   }
 });

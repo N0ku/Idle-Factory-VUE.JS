@@ -13,23 +13,11 @@
 </template>
 
 <script>
-import { useMyStore } from './store/store';
-import { mapStores } from 'pinia'
+// import { useMyStore } from './store/store';
+// import { mapStores } from 'pinia'
 
 export default {
-  name: "App",
-  data() {
-    return {
-      apiData: {},
-    };
-  },
-  computed: {
-    ...mapStores(useMyStore)
-  },
-  mounted() {
-    this.myStore.getRessources();
-    console.log(this.myStore.ressources);
-  }
+  name: "App"
   // methods: {
   //   requete() {
   //     fetch("http://localhost:3000/factories")
