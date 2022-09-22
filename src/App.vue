@@ -3,8 +3,8 @@
     <nav>
       <ul>
         <li>
-          <router-link to="/">Factory</router-link>
-          <router-link to="/form">Form</router-link>
+          <router-link to="/">Form</router-link>
+          <router-link to="/factory">Factory</router-link>
         </li>
       </ul>
     </nav>
@@ -13,9 +13,8 @@
 </template>
 
 <script>
-
 export default {
-  name: "App"
+  name: "App",
 };
 </script>
 

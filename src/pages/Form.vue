@@ -23,6 +23,8 @@
 
 <script>
 import axios from "axios";
+import { useMyStore } from "../store/store";
+import { mapStores } from "pinia";
 
 export default {
   name: "FormPage",
@@ -76,12 +78,15 @@ export default {
         this.sendNewAccount();
       }
     },
-    connect() {},
+    connect() {
+      location.assign("/factory");
+    },
   },
-  created() {
-    fetch("http://localhost:3000/ressources")
-      .then((result) => result.json())
-      .then((resources) => (this.resources = resources));
+  computed: {
+    ...mapStores(useMyStore),
+  },
+  async created() {
+    this.resources = await this.myStore.getResources();
   },
 };
 </script>
