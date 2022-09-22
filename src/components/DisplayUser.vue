@@ -19,15 +19,17 @@
             </li>
           </ul>
           <ul v-if="del == true">
-            <li v-for="ressource in ressources" :key="ressource.id">
-              {{ ressource.name }} <button v-on:click="deleteRessource(ressource[id])">Delete</button>
+            <li v-for="ressource, index in ressources" :key="ressource.id">
+              {{ ressource.name }} <button v-on:click="deleteRessource(ressource.id, index)">Delete</button>
             </li>
           </ul>
           <ul v-if="update == true">
             <li v-for="ressource in ressources" :key="ressource.id">
               {{ ressource.name }} 
-              <input type="text" name="updateValue" id="updateValue">
-              <!--<button v-on:click="updateRessource(ressource[id])">Update</button>-->
+              <form submit.prevent="start">
+                <input type="text" name="updateValue">
+                <button type="submit" v-on:click="updateRessource(ressource.id)">Update</button>
+              </form>
             </li>
           </ul>
         </div>
@@ -51,6 +53,7 @@ import axios from 'axios';
         name:"DisplayUser",
         data() {
           return {
+            updateValue: "",
             add: "",
             listRessources : false,
             update : false,
@@ -90,29 +93,42 @@ import axios from 'axios';
           openDelete(){
             this.listRessources = true;
             this.del = true;
+            this.update = false;
+            this.list = false;
           },
           // Open the update window with the list of ressources
           openUpdate(){
             this.listRessources = true;
             this.update = true;
+            this.list = false;
+            this.del = false;
           },
           // Open the list of ressources
           listRessource(){
             this.listRessources = true;
             this.list = true;
+            this.del = false;
+            this.update = false;
           },
           // Delete a ressource
-          deleteRessource(id){
-            this.ressources.splice(id, 1);
+          deleteRessource(id, index){
+            console.log(id, index);
+
+            this.ressources.splice(index, 1);
 
             async function deleted() {
-              await fetch('http://localhost:3000/ressources', { method: 'DELETE' });
+              await fetch('http://localhost:3000/ressources/'+id, { method: 'DELETE' });
             }
             deleted();
           },
           // Update a ressource (rename the ressource)
-          updateRessource(id){
-            this.ressources[id].name = document.getElementById('updateValue').setAttribute("value");
+          updateRessource(idOfRessource){
+            axios.patch('http://localhost:3000/ressources/'+idOfRessource, 
+            {
+              id: idOfRessource,
+              name: this.updateValue,
+              production_level: 1
+            })
           }
         },
         computed: {
