@@ -14,7 +14,7 @@ export const useMyStore = defineStore('my', {
         .then((result) => this.users = result.data)
     },
     async getResources() {
-      axios.get("http://localhost:3000/resources")
+      axios.get("http://localhost:3000/ressources")
         .then((result) => this.resources = result.data)
     }
   }

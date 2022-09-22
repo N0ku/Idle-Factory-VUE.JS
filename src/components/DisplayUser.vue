@@ -38,6 +38,7 @@
           </li>
         </ul>
       </div>
+      <DisplayOffer/>
     </div>
 </template>
 
@@ -45,6 +46,7 @@
     import { useMyStore } from '../store/store'
     import { mapStores } from 'pinia'
     import axios from 'axios';
+    import DisplayOffer from '../components/DisplayOffers.vue';
 
     export default {
         name:"DisplayUser",
@@ -65,6 +67,9 @@
             }
           }
         },
+        components:{
+          DisplayOffer,
+        },
         methods: {
           // Add a resource to the list of resources
           addResource(){
@@ -81,6 +86,7 @@
           },
           // Close the window with the list of resources
           closeList(){
+            console.log(this.resources[0].id)
             this.listResources = false;
             this.del = false;
             this.update = false;
@@ -118,6 +124,7 @@
           },
           // Update a resource (rename the resource)
           updateResource(idOfResource){
+            console.log(idOfResource);
             axios.patch('http://localhost:3000/ressources/'+idOfResource, 
             {
               id: idOfResource,
