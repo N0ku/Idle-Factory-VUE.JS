@@ -1,118 +1,144 @@
 <template>
     <div>
-      <div v-if="this.ressources.id == 1">
-        <ul>
-
-        </ul>
-        <input type="text" name="add" id="add"> 
-        <button v-on:click="addRessource()">Add ressource</button>
-        <button v-on:click="openDelete()">Delete ressource</button>
-        <button v-on:click="openUpdate()">Manage ressources</button>
-        <button v-on:click="listRessource()">List ressources</button>
-        <div v-show="listRessources == true">
-          <button v-on:click="closeList()"></button>
+      <div v-if="this.users.id == 1">
+        <form submit.prevent="start">
+          <input type="text" v-model="add" name="add"> 
+          <button type="submit" v-on:click="addResource()">Add resource</button>
+        </form>
+        <button v-on:click="openDelete()">Delete resource</button>
+        <button v-on:click="openUpdate()">Manage resources</button>
+        <button v-on:click="listResource()">List resources</button>
+        <div v-show="listResources == true">
+          <button v-on:click="closeList()">x</button>
           <ul v-if="list == true">
-            <li v-for="ressource in ressources" :key="ressource.id">
-              {{ ressource.name }}
+            <li v-for="resource in resources" :key="resource.id">
+              {{ resource.name }}
             </li>
           </ul>
           <ul v-if="del == true">
-            <li v-for="ressource in ressources" :key="ressource.id">
-              {{ ressource.name }} <button v-on:click="deleteRessource(ressource[id])"></button>
+            <li v-for="resource, index in resources" :key="resource.id">
+              {{ resource.name }} <button v-on:click="deleteResource(resource.id, index)">Delete</button>
             </li>
           </ul>
           <ul v-if="update == true">
-            <li v-for="ressource in ressources" :key="ressource.id">
-              {{ ressource.name }} 
-              <input type="text" name="updateValue" id="updateValue">
-              <!--<button v-on:click="updateRessource(ressource[id])"></button>-->
+            <li v-for="resource in resources" :key="resource.id">
+              {{ resource.name }} 
+              <form submit.prevent="start">
+                <input type="text" v-model="updateValue" name="updateValue">
+                <button type="submit" v-on:click="updateResource(resource.id)">Update</button>
+              </form>
             </li>
           </ul>
         </div>
       </div>
-      <div>
+      <div v-else>
         <ul>
-          <li v-for="ressource in ressources" :key="ressource.id">
-            {{ ressource.name }}
+          <li v-for="resource in resources" :key="resource.id">
+            {{ resource.name }}
           </li>
         </ul>
       </div>
+      <DisplayOffer/>
     </div>
 </template>
 
 <script>
     import { useMyStore } from '../store/store'
     import { mapStores } from 'pinia'
+    import axios from 'axios';
+    import DisplayOffer from '../components/DisplayOffers.vue';
 
     export default {
         name:"DisplayUser",
         data() {
           return {
-            listRessources : false,
+            updateValue: "",
+            add: "",
+            listResources : false,
             update : false,
             del : false,
             list : false,
-            ressources: {},
-            users: {}
+            resources: {},
+            users: {
+              "id": 1,
+              "username": "Test",
+              "money": 1000,
+              "factories": []
+            }
           }
         },
+        components:{
+          DisplayOffer,
+        },
         methods: {
-          // Add a ressource to the list of ressources
-          addRessource(){
-            var ressource = document.getElementById('add').getAttribute("value");
-            this.ressources.push({id: this.ressources.length+1, name: ressource, production_level: 1});
+          // Add a resource to the list of resources
+          addResource(){
+            this.resources.push({id: this.resources.length+1, name: this.add, production_level: 1});
 
-            async function postData(url = '', data = {}) {
-              const response = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(data)
-            });
-            return response.json();
-          }
-
-          postData('http://localhost:3000/ressources', this.ressources)
-            .then((data) => {
-              console.log(data);
-            });
-
+            axios.post(
+              'http://localhost:3000/ressources',
+              {
+                id: this.resources.length+1,
+                name: this.add,
+                production_level: 1
+              }
+            );
           },
-          // Close the window with the list of ressources
+          // Close the window with the list of resources
           closeList(){
-            this.listRessources = false;
+            console.log(this.resources[0].id)
+            this.listResources = false;
             this.del = false;
             this.update = false;
             this.list = false;
           },
-          // Open the delete window with the list of ressources
+          // Open the delete window with the list of resources
           openDelete(){
-            this.listRessources = true;
+            this.listResources = true;
             this.del = true;
+            this.update = false;
+            this.list = false;
           },
-          // Open the update window with the list of ressources
+          // Open the update window with the list of resources
           openUpdate(){
-            this.listRessources = true;
+            this.listResources = true;
             this.update = true;
+            this.list = false;
+            this.del = false;
           },
-          // Open the list of ressources
-          listRessource(){
-            this.listRessources = true;
+          // Open the list of resources
+          listResource(){
+            this.listResources = true;
             this.list = true;
+            this.del = false;
+            this.update = false;
           },
-          // Delete a ressource
-          deleteRessource(id){
-            this.ressources.splice(id, 1);
+          // Delete a resource
+          deleteResource(id, index){
+            this.resources.splice(index, 1);
+
+            async function deleted() {
+              await fetch('http://localhost:3000/ressources/'+id, { method: 'DELETE' });
+            }
+            deleted();
           },
-          // Update a ressource (rename the ressource)
-          updateRessource(id){
-            this.ressources[id].name = document.getElementById('updateValue').setAttribute("value");
+          // Update a resource (rename the resource)
+          updateResource(idOfResource){
+            console.log(idOfResource);
+            axios.patch('http://localhost:3000/ressources/'+idOfResource, 
+            {
+              id: idOfResource,
+              name: this.updateValue,
+              production_level: this.resources[idOfResource].production_level
+            });
           }
         },
         computed: {
           ...mapStores(useMyStore)
         },
         mounted() {
-          this.myStore.getRessources();
-          this.ressources = this.myStore.ressources;
+          this.myStore.getResources();
+          this.resources = this.myStore.resources;
           
         }
     }
