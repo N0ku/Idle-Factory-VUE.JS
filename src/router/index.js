@@ -4,14 +4,14 @@ import Form from '../pages/Form.vue';
 
 const routes = [
     {
-        name: 'Factory',
+        name: 'Form',
         path: '/',
-        component: Factory
+        component: Form
     },
     {
-        name: 'Form',
-        path: '/form',
-        component: Form
+        name: 'Factory',
+        path: '/factory',
+        component: Factory
     }
 ]
 

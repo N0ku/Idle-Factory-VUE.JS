@@ -3,8 +3,8 @@
     <nav>
       <ul>
         <li>
-          <router-link to="/">Factory</router-link>
-          <router-link to="/form">Form</router-link>
+          <router-link to="/">Form</router-link>
+          <router-link to="/factory">Factory</router-link>
         </li>
       </ul>
     </nav>
@@ -13,21 +13,8 @@
 </template>
 
 <script>
-// import { useMyStore } from './store/store';
-// import { mapStores } from 'pinia'
-
 export default {
-  name: "App"
-  // methods: {
-  //   requete() {
-  //     fetch("http://localhost:3000/factories")
-  //       .then((result) => result.json())
-  //       .then((json) => (this.apiData = json));
-  //   },
-  // },
-  // mounted() {
-  //   this.requete();
-  // },
+  name: "App",
 };
 </script>
 

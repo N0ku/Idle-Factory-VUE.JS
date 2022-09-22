@@ -12,7 +12,7 @@
       <label for="resources">Choose your first factory: </label>
       <select name="resources" id="resources" v-model="select">
         <option value="">--Choose a resources--</option>
-        <option v-for="resource in ressources" :key="resource">
+        <option v-for="resource in resources" :key="resource">
           {{ resource.name }}
         </option>
       </select>
@@ -23,6 +23,8 @@
 
 <script>
 import axios from "axios";
+import { useMyStore } from "../store/store";
+import { mapStores } from "pinia";
 
 export default {
   name: "FormPage",
@@ -30,7 +32,7 @@ export default {
     return {
       users: {},
       name: "",
-      ressources: {},
+      resources: {},
       select: "",
     };
   },
@@ -41,12 +43,11 @@ export default {
           .then((result) => result.json())
           .then((users) => this.verifyUsers(users));
       } else {
-        console.log("Pseudo invalide");
+        console.log("Username invalid");
       }
     },
     verifyUsers(users) {
       let exist;
-      console.log(users);
       this.users = users;
       for (let i = 0; i < users.length; i++) {
         if (users[i].name == this.name) {
@@ -78,12 +79,15 @@ export default {
       }
     },
     connect() {
+      this.myStore.username = this.name;
+      this.$router.push("/factory");
     },
   },
-  created() {
-    fetch("http://localhost:3000/ressources")
-      .then((result) => result.json())
-      .then((ressources) => (this.ressources = ressources));
+  computed: {
+    ...mapStores(useMyStore),
+  },
+  async created() {
+    this.resources = await this.myStore.getResources();
   },
 };
 </script>
