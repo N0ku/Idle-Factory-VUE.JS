@@ -20,7 +20,7 @@
             <p> {{offer.resource}} </p>
             <p> {{offer.price}} </p>
             <p> {{offer.quantity}} </p>
-            <button v-on:click="sellOffer()">Sell your resource</button>
+            <button v-on:click="sellOffer(offer)">Sell your resource</button>
           </div>
         </li>
       </div>
@@ -100,6 +100,29 @@
               }
             } 
           }
+          else{
+            for( let j = 0; j < this.users.length; j++){
+              if(this.users.factories[j].resource == this.re_source){
+                if(this.users.money < this.price){
+                  return 0;
+                }
+                else{
+                  this.users.money -= this.price;
+                  axios.post(
+                    'http://localhost:3000/offers',
+                    {
+                      id: this.users[i].id,
+                      status: "OPEN",
+                      resource: this.re_source,
+                      price: this.prize,
+                      quantity: this.quantities,
+                      type: this.typ
+                    }
+                  );
+                }
+              }
+            } 
+          }
         }
       }
     },
@@ -114,7 +137,12 @@
     buyOffer(offer){
       for (let i = 0; i < this.users.length; i++) {
         if(this.users[i].name == this.username){
-          this.users[i].money -= offer.price;
+          if(this.users[i].money < offer.price){
+            return 0;
+          }
+          else{
+            this.users[i].money -= offer.price;
+          }
           for(let j = 0; j < this.users[i].factories.length; j++){
             if(this.users[i].factories[j].name == offer.resource){
               this.users[i].factories[j].quantity += offer.quantity;
@@ -133,8 +161,37 @@
         })
       }
     },
-    sellOffer(){
+    sellOffer(offer){
+      for (let i = 0; i < this.users.length; i++) {
+        if(this.users[i].name == this.username){
+          this.users[i].money += offer.price;
+          for(let j = 0; j < this.users[i].factories.length; j++){
+            if(this.users[i].factories[j].name == offer.resource){
+              if(this.users[i].factories[j].quantity < offer.quantity){
+                return 0;
+              }
+              else{
+                this.users[i].factories[j].quantity -= offer.quantity;
+              }
+            }
+          } 
+          for(let k = 0; k < this.users.length; k++) {
+            if(this.users[k].id == offer.id){
+              if(this.users[k].money < offer.price){
+                return 0;
+              }
+              else{
+                this.users[k].money -= offer.price;
+              }
+            }
+          }
+        }
+        this.offers.status = "CLOSED";
 
+        axios.patch('http://localhost:3000/offers', {
+          statut: this.offers.status
+        })
+      }
     },
     computed: {
       ...mapStores(useMyStore)
