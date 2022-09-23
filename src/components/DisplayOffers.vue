@@ -67,6 +67,7 @@
       }
     },
     addOffer(){
+      console.log("Oskour");
       this.dispOffer = false;
       this.add = true;
     },
