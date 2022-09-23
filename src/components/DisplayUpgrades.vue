@@ -11,21 +11,32 @@
 
 <script>
 import axios from "axios";
+import { useMyStore } from "../store/store";
+import { mapStores } from "pinia";
+
 export default {
   name: "DisplayUpgrades",
   data() {
     return {
-      i: 1,
+      i: 0,
+      id: 0,
     };
   },
 
   methods: {
     levelUp() {
-      axios.patch("http://localhost:3000/factories/1", {
-        level: (this.i = this.i + 1),
+      axios.patch("http://localhost:3000/factories/" + this.id, {
+        level: (this.i++),
       });
     },
   },
+  computed: {
+    ...mapStores(useMyStore),
+  },
+  async mounted() {
+    this.id = this.myStore.user.id;
+    this.i = await this.myStore.getLvlFactory(this.id);
+  }
 };
 </script>
 

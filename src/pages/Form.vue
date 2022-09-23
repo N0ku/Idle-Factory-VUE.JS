@@ -1,16 +1,20 @@
 <template>
   <div>
     <h1>Welcome Idle Factory:The Game 🤯</h1>
-    <label for="name">Username</label>
+    <button @click="noAccount = false">Login</button>
+    <button @click="noAccount = true">Register</button>
     <form @submit.prevent="start">
+      <label for="name">Username</label>
       <input
         type="text"
         v-model="name"
         id="name"
         placeholder="Enter your name.."
       />
-      <label for="resources">Choose your first factory: </label>
-      <select name="resources" id="resources" v-model="select">
+      <label for="resources" v-if="noAccount"
+        >Choose your first factory:
+      </label>
+      <select name="resources" id="resources" v-model="select" v-if="noAccount">
         <option value="">--Choose a resources--</option>
         <option v-for="resource in resources" :key="resource">
           {{ resource.name }}
@@ -34,14 +38,13 @@ export default {
       name: "",
       resources: {},
       select: "",
+      noAccount: null,
     };
   },
   methods: {
     start() {
       if (this.name.length > 3) {
-        fetch("http://localhost:3000/users")
-          .then((result) => result.json())
-          .then((users) => this.verifyUsers(users));
+        this.verifyUsers(this.users);
       } else {
         console.log("Username invalid");
       }
@@ -88,12 +91,21 @@ export default {
       this.myStore.username = this.name;
       this.$router.push("/factory");
     },
+    sendUser() {
+      for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i].name == this.username) {
+          return this.users[i];
+        }
+      }
+    }
   },
   computed: {
     ...mapStores(useMyStore),
   },
   async created() {
     this.resources = await this.myStore.getResources();
+    this.users = await this.myStore.getUsers();
+    this.myStore.user = await this.sendUser();
   },
 };
 </script>

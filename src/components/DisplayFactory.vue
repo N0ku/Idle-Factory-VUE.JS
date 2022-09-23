@@ -1,13 +1,14 @@
 <template>
   <div class="factory">
     <div class="box-resources">
+      <h3>{{ factory }}</h3>
       <h1>{{ factory.resources }}</h1>
       <div class="box-resources-infos">
         <p>{{ factory.quantity }}</p>
         <p>{{ factory.production }}</p>
       </div>
     </div>
-    <div class="canva">
+    <div class="canvas">
       <p>Factory design</p>
     </div>
     <div class="pagination">
@@ -36,6 +37,7 @@ export default {
       username: "",
       user: {},
       page: 0,
+      p: null,
     };
   },
   methods: {
@@ -47,24 +49,53 @@ export default {
       }
       this.factory = this.user.factories[this.page];
       this.factories = this.user.factories;
-      console.log(this.factories);
-      console.log(this.factory);
     },
     updatePage(page) {
       console.log("update page");
       this.page = page;
       console.log(this.page);
       this.factory = this.user.factories[this.page];
+      this.myStore.currentResource = this.factory.resources;
+    },
+    product() {
+      for (let i = 0; i < this.factories.length; i++) {
+        this.factories[i].quantity += this.factories[i].production;
+      }
+      let data = {
+        id: this.user.id,
+        name: this.username,
+        money: this.user.money,
+        factories: this.factories,
+      };
+      this.myStore.sendProduction(data, this.user.id);
+    },
+    sendResource() {
+      return this.factory.resources;
+    },
+    async factoryProduction() {
+      this.users = await this.myStore.getUsers();
+      this.username = this.myStore.username;
+      this.loadData(this.users);
+      this.myStore.user = this.user;
+      this.product();
+      console.log("production in progress..");
     },
   },
   computed: {
     ...mapStores(useMyStore),
   },
-  async mounted() {
+  async created() {
     this.users = await this.myStore.getUsers();
     this.username = this.myStore.username;
     this.loadData(this.users);
+    this.myStore.currentResource = await this.sendResource();
     this.myStore.user = this.user;
+  },
+  mounted() {
+    this.p = setInterval(this.factoryProduction, 60000);
+  },
+  beforeUnmount() {
+    clearInterval(this.p);
   },
 };
 </script>
