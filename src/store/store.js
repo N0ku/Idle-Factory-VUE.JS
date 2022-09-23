@@ -23,9 +23,6 @@ export const useMyStore = defineStore('my', {
         .then((result) => this.resources = result.data)
       return this.resources;
     },
-    async getResourcesName() {
-      return this.currentResource;
-    },
     // eslint-disable-next-line no-unused-vars
     async getLvlFactory(id, resource) {
       console.log("HEY");
