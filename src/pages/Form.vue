@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Welcome Idle Factory:The Game 🤯</h1>
+    <h1>Welcome on Idle Factory:The Game 🤯</h1>
     <button @click="noAccount = false">Login</button>
     <button @click="noAccount = true">Register</button>
     <form @submit.prevent="start">
@@ -111,4 +111,12 @@ export default {
 </script>
 
 <style scoped>
+  form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
 </style>

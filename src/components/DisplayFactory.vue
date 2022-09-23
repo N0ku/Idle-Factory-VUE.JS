@@ -1,11 +1,10 @@
 <template>
   <div class="factory">
     <div class="box-resources">
-      <h3>{{ factory }}</h3>
       <h1>{{ factory.resources }}</h1>
       <div class="box-resources-infos">
-        <p>{{ factory.quantity }}</p>
-        <p>{{ factory.production }}</p>
+        <p>Quantity : {{ factory.quantity }}</p>
+        <p>Production : {{ factory.production }}/min</p>
       </div>
     </div>
     <div class="canvas">
@@ -99,3 +98,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .pagination button{
+    font-size: 30px;
+    width:50px;
+    height:50px;
+  }
+</style>
