@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="this.users.id == 1">
+    <div>
       <form submit.prevent="start">
         <input type="text" v-model="add" name="add" />
         <button type="submit" v-on:click="addResource()">Add resource</button>
@@ -36,7 +36,7 @@
         </ul>
       </div>
     </div>
-    <div v-else>
+    <div >
       <ul>
         <li v-for="resource in resources" :key="resource.id">
           {{ resource.name }}
@@ -144,6 +144,8 @@ export default {
     ...mapStores(useMyStore),
   },
   mounted() {
+    this.myStore.getOffers();
+    this.offers = this.myStore.offers;
     this.myStore.getResources();
     this.resources = this.myStore.resources;
   },

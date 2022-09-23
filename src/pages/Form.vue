@@ -4,14 +4,14 @@
     <button @click="noAccount = false">Login</button>
     <button @click="noAccount = true">Register</button>
     <form @submit.prevent="start">
-      <label for="name">Username</label>
+      <label id="label-name" for="name">Username</label>
       <input
         type="text"
         v-model="name"
         id="name"
-        placeholder="Enter your name.."
+        placeholder="Enter your name..."
       />
-      <label for="resources" v-if="noAccount"
+      <label id="label-choose-factory" for="resources" v-if="noAccount"
         >Choose your first factory:
       </label>
       <select name="resources" id="resources" v-model="select" v-if="noAccount">
@@ -39,6 +39,7 @@ export default {
       resources: {},
       select: "",
       noAccount: null,
+      factories: {},
     };
   },
   methods: {
@@ -77,6 +78,13 @@ export default {
           ],
         })
         .then((res) => res);
+
+      axios.post("http://localhost:3000/factories", {
+        user: this.users.length + 1,
+        name: this.select,
+        production_level: 1,
+      });
+
       this.connect();
     },
     account(exist) {
@@ -91,13 +99,6 @@ export default {
       this.myStore.username = this.name;
       this.$router.push("/factory");
     },
-    sendUser() {
-      for (let i = 0; i < this.users.length; i++) {
-        if (this.users[i].name == this.username) {
-          return this.users[i];
-        }
-      }
-    }
   },
   computed: {
     ...mapStores(useMyStore),
@@ -105,18 +106,18 @@ export default {
   async created() {
     this.resources = await this.myStore.getResources();
     this.users = await this.myStore.getUsers();
-    this.myStore.user = await this.sendUser();
+    this.factories = await this.myStore.getFactories();
   },
 };
 </script>
 
 <style scoped>
-  form{
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-  }
+form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
 </style>
