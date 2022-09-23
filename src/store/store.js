@@ -35,15 +35,6 @@ export const useMyStore = defineStore('my', {
         .then((result) => this.offers = result.data)
       return this.offers;
     },
-    // eslint-disable-next-line no-unused-vars
-   /*  async getLvlFactory(id, resource) {
-      console.log("HEY");
-      await axios.get("http://localhost:3000/factories/" + id)
-        .then((result) => {
-          console.log(result);
-        })
-      return this.currentLvl;
-    }, */
     async sendProduction(production, id) {
       axios.patch(`http://localhost:3000/users/` + id ,production)
     }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="this.username == 'admin'">
       <form submit.prevent="start">
         <input type="text" v-model="add" name="add" />
         <button type="submit" v-on:click="addResource()">Add resource</button>
@@ -35,13 +35,6 @@
           </li>
         </ul>
       </div>
-    </div>
-    <div >
-      <ul>
-        <li v-for="resource in resources" :key="resource.id">
-          {{ resource.name }}
-        </li>
-      </ul>
     </div>
     <DisplayOffer />
   </div>

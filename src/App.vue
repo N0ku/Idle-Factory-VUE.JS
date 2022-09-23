@@ -46,7 +46,7 @@ input[type="button"] {
 
 #label-name {
   font-family: "SvRegular";
-  font-size: 25px;
+  font-size: 35px;
   padding: 10px;
   letter-spacing: 2px;
   color: rgb(255, 184, 130);
@@ -67,7 +67,8 @@ input[type="button"] {
   outline: 3px solid rgb(71, 40, 18);
 }
 
-#play-button {
+#play-button,
+#play-button-1 {
   background-color: rgb(198, 139, 94);
   transition: all 0.3s ease-in-out;
   border-radius: 5px;
@@ -78,13 +79,18 @@ input[type="button"] {
   margin-top: 10px;
 }
 
-#play-button:hover {
+#play-button-1 {
+  margin-left: 10px;
+}
+
+#play-button:hover,
+#play-button-1:hover {
   outline: 3px solid rgb(71, 40, 18);
 }
 
 #label-choose-factory {
   font-family: "SvRegular";
-  font-size: 25px;
+  font-size: 35px;
   padding: 10px;
   letter-spacing: 2px;
   color: rgb(255, 184, 130);
@@ -117,16 +123,25 @@ input[type="button"] {
   font-size: 25px;
   line-height: 50px;
   background-color: rgb(198, 139, 94);
-  outline: 3px solid rgb(71, 40, 18);
+  outline: 5px solid rgb(71, 40, 18);
   border-radius: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
 }
 
 #production {
-  width: 70px;
+  width: 100px;
   height: 50px;
 }
 
 #quantity {
-  font-family: "SvRegular";
+  width: 50px;
+  height: 50px;
 }
+
+input[type="text"]::placeholder{
+  color:rgb(120, 71, 37);
+}
+
 </style>

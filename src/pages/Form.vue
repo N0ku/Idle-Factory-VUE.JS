@@ -82,7 +82,7 @@ export default {
       axios.post("http://localhost:3000/factories", {
         user: this.users.length + 1,
         name: this.select,
-        production_level: 1,
+        level: 1,
       });
 
       this.connect();

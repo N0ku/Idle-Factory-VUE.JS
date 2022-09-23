@@ -1,7 +1,7 @@
 <template>
   <div class="factory">
     <div class="box-resources">
-      <h1>{{ factory.resources }}</h1>
+      <h1>{{ currentResName }}</h1>
       <div class="box-resources-infos">
         <p id="label-quantity">Quantity :</p>
         <p id="quantity">{{ factory.quantity }}</p>
@@ -28,6 +28,18 @@
     <p>Level :</p>
     {{ i }}
   </div>
+  <form @submit.prevent="createFactory">
+    <label id="label-choose-factory" for="resources"
+      >Choose your new factory:
+    </label>
+    <select name="resources" id="resources" v-model="select">
+      <option value="">--Choose a resources--</option>
+      <option v-for="resource in resources" :key="resource">
+        {{ resource.name }}
+      </option>
+    </select>
+    <input type="submit" id="play-button-1" value="Create !" />
+  </form>
 </template>
 
 <script>
@@ -43,14 +55,17 @@ export default {
       factory: [] /* Current factory */,
       users: {} /* All users */,
       username: "",
+      resources: {},
       user: {} /* Us */,
       page: 0,
       p: null,
       i: 0,
       id: 0,
       currentResName: "",
-      allFactories: {} /* All Factories in the all game */,
+      allFactories: [] /* All Factories in the all game */,
       image: "/src/assets/giffactory.gif",
+      select: "",
+      idFactory: 0,
     };
   },
   methods: {
@@ -70,6 +85,23 @@ export default {
       this.factory = this.user.factories[this.page];
       this.myStore.currentResource = this.factory.resources;
     },
+    createFactory() {
+      let data = {
+        resources: this.select,
+        quantity: 10,
+        production: 100,
+      };
+      this.factories.push(data);
+      axios.patch("http://localhost:3000/users/" + this.id, {
+        factories: this.factories,
+      });
+
+      axios.post("http://localhost:3000/factories", {
+        user: this.id,
+        name: this.select,
+        level: 1,
+      });
+    },
     product() {
       for (let i = 0; i < this.factories.length; i++) {
         this.factories[i].quantity += this.factories[i].production;
@@ -86,30 +118,39 @@ export default {
       return this.factory.resources;
     },
     levelUp() {
+      this.getIdFacto();
       for (let i = 0; i < this.factories.length; i++) {
-          console.log("test");
-          if (this.factories[i].quantity < 100) {
-            return 0;
-          } else {
-            console.log("test done");
-            axios.patch("http://localhost:3000/users/" + this.user.id, {
-              factories: [
-                {
-                  name: this.factories[i].name,
-                  quantity:
-                    this.factories[i].quantity -
-                    100 * this.factory.level,
-                  production: this.factories[i].production * 2,
-                },
-              ],
-            });
-            axios.patch("http://localhost:3000/factories/" + 3, {
-              level: this.i++,
-            });
-          }
+        if (this.factories[i].quantity < 100) {
+          return 0;
+        } else {
+          console.log(this.factory);
+          axios.patch("http://localhost:3000/users/" + this.id, {
+            factories: [
+              {
+                name: this.factories[i].name,
+                quantity:
+                  this.factories[i].quantity - 100 * this.allFactories.level,
+                production: this.factories[i].production * 2,
+              },
+            ],
+          });
+          axios.patch("http://localhost:3000/factories/" + this.idFactory, {
+            level: this.i++,
+          });
+        }
+      }
+    },
+    getIdFacto() {
+      for (let index = 0; index < this.allFactories.length; index++) {
+        let facto = this.allFactories[index];
+        if (facto.user == this.id && facto.name == this.factory.resources) {
+          this.idFactory = facto.id;
+          break;
+        }
       }
     },
     async factoryProduction() {
+      console.log(this.factory);
       this.users = await this.myStore.getUsers();
       this.username = this.myStore.username;
       this.loadData(this.users);
@@ -124,16 +165,16 @@ export default {
   async created() {
     this.users = await this.myStore.getUsers();
     this.username = this.myStore.username;
-    this.allFactories = this.myStore.getFactories();
+    this.allFactories = await this.myStore.getFactories();
+    this.resources = await this.myStore.getResources();
     this.loadData(this.users);
     this.myStore.currentResource = await this.sendResource();
     this.myStore.user = this.user;
     this.id = this.user.id;
     this.currentResName = this.factory.resources;
-    console.log(this.factory);
   },
   mounted() {
-    this.p = setInterval(this.factoryProduction, 60000);
+    this.p = setInterval(this.factoryProduction, 5000);
   },
   beforeUnmount() {
     clearInterval(this.p);
