@@ -63,136 +63,138 @@
         prize: 1,
         quantities: 1,
         typ: "WTS",
-        username: ""
+        username: "",
+        add: false
       }
     },
-    addOffer(){
-      console.log("Oskour");
-      this.dispOffer = false;
-      this.add = true;
-    },
-    closeAddOffer(){
-      this.add = false;
-      this.dispOffer = true;
-    },
-    createOffer(){
-      for(let i = 0; i < this.users.length; i++){
-        if (this.users[i].name == this.username){
-          if(this.typ == 'WTS'){
-            for( let j = 0; j < this.users.factories.length; j++){
-              if(this.users.factories[j].resource == this.re_source){
-                if(this.users.factories[j].quantity < this.quantities){
+    methods: {
+      addOffer(){
+        this.dispOffer = false;
+        this.add = true;
+      },
+      closeAddOffer(){
+        this.add = false;
+        this.dispOffer = true;
+      },
+      createOffer(){
+        for(let i = 0; i < this.users.length; i++){
+          if (this.users[i].name == this.username){
+            if(this.typ == 'WTS'){
+              for( let j = 0; j < this.users.factories.length; j++){
+                if(this.users.factories[j].resource == this.re_source){
+                  if(this.users.factories[j].quantity < this.quantities){
+                    return 0;
+                  }
+                  else{
+                    this.users.factories[j].quantity -= this.quantities;
+                    axios.post(
+                      'http://localhost:3000/offers',
+                      {
+                        id: this.users[i].id,
+                        status: "OPEN",
+                        resource: this.re_source,
+                        price: this.prize,
+                        quantity: this.quantities,
+                        type: this.typ
+                      }
+                    );
+                  }
+                }
+              } 
+            }
+            else{
+              for( let j = 0; j < this.users.length; j++){
+                if(this.users.factories[j].resource == this.re_source){
+                  if(this.users.money < this.price){
+                    return 0;
+                  }
+                  else{
+                    this.users.money -= this.price;
+                    axios.post(
+                      'http://localhost:3000/offers',
+                      {
+                        id: this.users[i].id,
+                        status: "OPEN",
+                        resource: this.re_source,
+                        price: this.prize,
+                        quantity: this.quantities,
+                        type: this.typ
+                      }
+                    );
+                  }
+                }
+              } 
+            }
+          }
+        }
+      },
+      buy(){
+        this.buys = true;
+        this.sell = false;
+      },
+      sells(){
+        this.buys = false;
+        this.sell = true;
+      },
+      buyOffer(offer){
+        for (let i = 0; i < this.users.length; i++) {
+          if(this.users[i].name == this.username){
+            if(this.users[i].money < offer.price){
+              return 0;
+            }
+            else{
+              this.users[i].money -= offer.price;
+            }
+            for(let j = 0; j < this.users[i].factories.length; j++){
+              if(this.users[i].factories[j].name == offer.resource){
+                this.users[i].factories[j].quantity += offer.quantity;
+              }
+            } 
+            for(let k = 0; k < this.users.length; k++) {
+              if(this.users[k].id == offer.id){
+                this.users[k].money += offer.price;
+              }
+            }
+          }
+          this.offers.status = "CLOSED";
+
+          axios.patch('http://localhost:3000/offers', {
+            statut: this.offers.status
+          })
+        }
+      },
+      sellOffer(offer){
+        for (let i = 0; i < this.users.length; i++) {
+          if(this.users[i].name == this.username){
+            this.users[i].money += offer.price;
+            for(let j = 0; j < this.users[i].factories.length; j++){
+              if(this.users[i].factories[j].name == offer.resource){
+                if(this.users[i].factories[j].quantity < offer.quantity){
                   return 0;
                 }
                 else{
-                  this.users.factories[j].quantity -= this.quantities;
-                  axios.post(
-                    'http://localhost:3000/offers',
-                    {
-                      id: this.users[i].id,
-                      status: "OPEN",
-                      resource: this.re_source,
-                      price: this.prize,
-                      quantity: this.quantities,
-                      type: this.typ
-                    }
-                  );
+                  this.users[i].factories[j].quantity -= offer.quantity;
                 }
               }
             } 
-          }
-          else{
-            for( let j = 0; j < this.users.length; j++){
-              if(this.users.factories[j].resource == this.re_source){
-                if(this.users.money < this.price){
+            for(let k = 0; k < this.users.length; k++) {
+              if(this.users[k].id == offer.id){
+                if(this.users[k].money < offer.price){
                   return 0;
                 }
                 else{
-                  this.users.money -= this.price;
-                  axios.post(
-                    'http://localhost:3000/offers',
-                    {
-                      id: this.users[i].id,
-                      status: "OPEN",
-                      resource: this.re_source,
-                      price: this.prize,
-                      quantity: this.quantities,
-                      type: this.typ
-                    }
-                  );
+                  this.users[k].money -= offer.price;
                 }
               }
-            } 
-          }
-        }
-      }
-    },
-    buy(){
-      this.buys = true;
-      this.sell = false;
-    },
-    sells(){
-      this.buys = false;
-      this.sell = true;
-    },
-    buyOffer(offer){
-      for (let i = 0; i < this.users.length; i++) {
-        if(this.users[i].name == this.username){
-          if(this.users[i].money < offer.price){
-            return 0;
-          }
-          else{
-            this.users[i].money -= offer.price;
-          }
-          for(let j = 0; j < this.users[i].factories.length; j++){
-            if(this.users[i].factories[j].name == offer.resource){
-              this.users[i].factories[j].quantity += offer.quantity;
-            }
-          } 
-          for(let k = 0; k < this.users.length; k++) {
-            if(this.users[k].id == offer.id){
-              this.users[k].money += offer.price;
             }
           }
-        }
-        this.offers.status = "CLOSED";
+          this.offers.status = "CLOSED";
 
-        axios.patch('http://localhost:3000/offers', {
-          statut: this.offers.status
-        })
-      }
-    },
-    sellOffer(offer){
-      for (let i = 0; i < this.users.length; i++) {
-        if(this.users[i].name == this.username){
-          this.users[i].money += offer.price;
-          for(let j = 0; j < this.users[i].factories.length; j++){
-            if(this.users[i].factories[j].name == offer.resource){
-              if(this.users[i].factories[j].quantity < offer.quantity){
-                return 0;
-              }
-              else{
-                this.users[i].factories[j].quantity -= offer.quantity;
-              }
-            }
-          } 
-          for(let k = 0; k < this.users.length; k++) {
-            if(this.users[k].id == offer.id){
-              if(this.users[k].money < offer.price){
-                return 0;
-              }
-              else{
-                this.users[k].money -= offer.price;
-              }
-            }
-          }
+          axios.patch('http://localhost:3000/offers', {
+            statut: this.offers.status
+          })
         }
-        this.offers.status = "CLOSED";
-
-        axios.patch('http://localhost:3000/offers', {
-          statut: this.offers.status
-        })
-      }
+      },
     },
     computed: {
       ...mapStores(useMyStore)

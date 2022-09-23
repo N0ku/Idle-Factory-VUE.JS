@@ -19,6 +19,11 @@ export const useMyStore = defineStore('my', {
      await axios.get("http://localhost:3000/ressources")
        .then((result) => this.resources = result.data)
       return this.resources;
-    }
+    },
+    async getOffers() {
+      await axios.get("http://localhost:3000/offers")
+        .then((result) => this.offers = result.data)
+       return this.offers;
+     },
   }
 });
